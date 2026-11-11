@@ -13,16 +13,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Download AutoJs6 APK
         run: |
           wget -q https://github.com/SuperMonster003/AutoJs6/releases/download/v6.7.0/autojs6-v6.7.0-universal-047ae62e.apk -O autojs6.apk
 
+      - name: Download APK Builder JAR
+        run: |
+          wget -q https://github.com/Steven-Qiang/AutoJs6-ApkBuilder/releases/download/v1.1.0/apkbuilder-cli.jar -O apkbuilder-cli.jar
+
       - name: Build APK
-        uses: Steven-Qiang/AutoJs6-ApkBuilder@main
-        with:
-          autojs: autojs6.apk
-          source: ./project
-          output: ForlentSky-v5.1.apk
+        run: |
+          java -jar apkbuilder-cli.jar -a autojs6.apk -s ./project -o ForlentSky-v5.1.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
