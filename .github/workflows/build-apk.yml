@@ -1,0 +1,32 @@
+name: Build Forlent Sky APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download AutoJs6 APK
+        run: |
+          wget -q https://github.com/SuperMonster003/AutoJs6/releases/download/v6.7.0/autojs6-v6.7.0-universal-047ae62e.apk -O autojs6.apk
+
+      - name: Build APK
+        uses: Steven-Qiang/AutoJs6-ApkBuilder@main
+        with:
+          autojs: autojs6.apk
+          source: ./project
+          output: ForlentSky-v5.1.apk
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ForlentSky-APK
+          path: ForlentSky-v5.1.apk
+          retention-days: 30
